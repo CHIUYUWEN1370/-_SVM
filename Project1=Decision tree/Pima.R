@@ -1,0 +1,35 @@
+library(MASS)
+pima.tree <- rpart(type ~ ., Pima.tr)
+plot(pima.tree)
+text(pima.tree)
+pima.prune1 <- prune(pima.tree, cp=0.03)
+plot(pima.prune1); text(pima.prune1)
+pima.prune2 <- prune(pima.tree, cp=0.1)
+plot(pima.prune2); text(pima.prune2)
+test <- predict(pima.tree, Pima.te)
+head(test)
+test <- predict(pima.tree, Pima.te, type="class")
+head(test)
+compare <- ifelse(test == Pima.te$type, 1, 0)
+sum(compare)
+length(compare) 
+accuracy <- sum(compare) / length(compare)
+accuracy
+test1 <- predict(pima.prune1, Pima.te, type="class")
+test2 <- predict(pima.prune2, Pima.te, type="class")
+compare1 <- ifelse(test1==Pima.te$type, 1, 0)
+compare2 <- ifelse(test2==Pima.te$type, 1, 0)
+accuracy1 <- sum(compare1) / length(compare1)
+accuracy2 <- sum(compare2) / length(compare2)
+accuracy
+accuracy1
+accuracy2
+
+library(randomForest)
+data(Pima.tr)
+pima.rf<-randomForest(type ~ ., data= Pima.tr)
+importance(pima.rf)
+test.rf <- predict(pima.rf, Pima.te, type="class") 
+compare.rf <- ifelse(test.rf == Pima.te$type, 1, 0)
+accuracy.rf <- sum(compare.rf)/ length(compare.rf)
+accuracy.rf
